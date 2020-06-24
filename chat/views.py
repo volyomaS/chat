@@ -1,9 +1,8 @@
 from django.shortcuts import render
 
 
-def index(request):
-    return render(request, 'chat/index.html')
-
-
 def room(request):
+    """
+    Chat room rendering
+    """
     return render(request, 'chat/room.html')

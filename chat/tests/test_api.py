@@ -5,7 +5,14 @@ from rest_framework.test import APITestCase
 
 
 class MessageApiTestCase(APITestCase):
+    """
+    Tests checking REST API functionality
+    """
+
     def setUp(self):
+        """
+        Creating few users
+        """
         self.test_user1 = User.objects.create(username='u1')
         self.test_user1.set_password('u1')
         self.test_user1.save()
@@ -17,18 +24,28 @@ class MessageApiTestCase(APITestCase):
         self.test_user3.save()
 
     def test_list_request(self):
+        """
+        Getting list of messages by an authorized user
+        """
         self.login_user1()
         response = self.client.get(reverse('message-api-list'), format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.logout()
 
     # def test_send_message_unauth(self):
+    #     """
+    #     Sending message by an unauthorized user
+    #     TODO it doesn't send, but also it doesn't raise http403
+    #     """
     #     url = reverse('message-api-list')
     #     message = {'recipient': 'u1', 'body': 'No auth!'}
     #     response = self.client.post(url, message, format='json')
     #     self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_send_message(self):
+        """
+        Sending message by an authorized user
+        """
         self.login_user1()
         url = reverse('message-api-list')
         message = {'recipient': 'u2', 'body': 'hello'}
@@ -37,6 +54,12 @@ class MessageApiTestCase(APITestCase):
         self.logout()
 
     def test_read_message(self):
+        """
+        Reading messages by an authorized users
+        a) u1 sending message to conversation
+        b) u2 reading this message
+        c) u3 can't read message because he's not in conversation
+        """
         self.login_user1()
         url = reverse('message-api-list')
         message = {'recipient': 'u2', 'body': 'hello'}
@@ -56,6 +79,9 @@ class MessageApiTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.logout()
 
+    """
+    List of functions to login and logout users 
+    """
     def login_user1(self):
         self.login('u1', 'u1')
 
