@@ -7,7 +7,32 @@ Serializers for REST defined in chat/serializers.py
 
 # How to start chat server
 
-1) Start the Redis server on the port that is declared in settings.py like:
+1) Install Python packages that are required:
+
+Django Channels:
+
+```cmd
+pip install channels
+```
+
+Django REST framework:
+
+```cmd
+pip install djangorestframework
+```
+
+2) Add chat module and packages to INSTALLED_APPS in settings.py:
+
+```python
+INSTALLED_APPS = [
+    'rest_framework',
+    'channels',
+    'chat',
+    ...
+]
+```
+
+3) Start the Redis server on the port that is declared in settings.py like:
 
 ```python
 CHANNEL_LAYERS = {
@@ -25,13 +50,13 @@ I did this with docker:
 docker run -p 6379:6379 -d redis:5
 ```
 
-2) Create a table in the database for MessageModel. I did it with this command:
+4) Create a table in the database for MessageModel. I did it with this command:
 
 ```cmd
 python manage.py --run-syncdb
 ```
 
-3) Run the server
+5) Run the server
 
 ```cmd
 python manage.py runserver
